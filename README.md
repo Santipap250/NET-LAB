@@ -6,7 +6,11 @@ Open-source network diagnostics workstation. React + TypeScript + Vite frontend,
 > **Status:** v0.1 scaffold. The initial release has been validated with `npm install`, `npm run typecheck`, `npm test` (49 passing), and `npm run build`.
 
 ## Screenshots
-Add your own after first run: `docs/screenshot-desktop.png`, `docs/screenshot-mobile.png`.
+Production screenshots captured at 1440px and 390px are included here:
+
+![Production desktop overview at 1440px](docs/production-overview-loaded-1440.png)
+
+![Production mobile overview at 390px](docs/production-overview-loaded-390.png)
 
 ## Features
 - **Overview** – public IPv4/IPv6, ISP, ASN, approximate location (5-min cache, source + timestamp shown), diagnostics summary, latency chart, live terminal.
