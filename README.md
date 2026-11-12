@@ -77,3 +77,10 @@ Vercel project/deployment permissions must be verified in the target team before
 ## License
 
 MIT. See [LICENSE](LICENSE).
+
+
+## OBIX SIGNAL RADAR Android extension
+
+The `feat/signal-radar-android` branch adds a Capacitor Android shell and a native `SignalRadar` plugin. Wi-Fi uses Android `WifiManager`, BLE uses `BluetoothLeScanner`, and cellular uses `TelephonyManager` data where the device exposes it. The PWA stays functional without native hardware access and explicitly shows unsupported states instead of fabricated values. Radar points are list/signal visualization only, not direction, distance or coordinates.
+
+Android setup and permission rationale are documented in [docs/signal-radar-android.md](docs/signal-radar-android.md). The repository includes `.github/workflows/android.yml` for a free debug build without signing keys. The local debug build completed successfully and produced `android/app/build/outputs/apk/debug/app-debug.apk` (4,171,256 bytes); no physical Android device or POCO X6 Pro was attached, so hardware behavior remains unverified here.

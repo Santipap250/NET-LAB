@@ -34,7 +34,7 @@ export interface IpInfo {
   ip: string; ipVersion: 4 | 6; provider: string | null; country: string | null;
   region: string | null; city?: string | null; asn: string | number | null; source: string; timestamp: string;
 }
-export type Tab = "home" | "diagnose" | "dns" | "toolkit" | "history";
+export type Tab = "home" | "diagnose" | "radar" | "dns" | "toolkit" | "history";
 export type LegacyTab = "overview" | "latency" | "http" | "route" | "monitor";
 export interface Ctx {
   store: Store;
