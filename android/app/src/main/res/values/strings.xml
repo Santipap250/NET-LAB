@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">OBIX NET-LAB X</string>
+    <string name="title_activity_main">OBIX NET-LAB X</string>
+    <string name="package_name">com.obix.netlab</string>
+    <string name="custom_url_scheme">com.obix.netlab</string>
+</resources>
