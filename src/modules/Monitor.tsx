@@ -37,6 +37,8 @@ export default function Monitor({ ctx }: { ctx: Ctx }) {
         <label><input type="checkbox" checked={store.settings.autoScroll} onChange={(e) => update((s) => ({ ...s, settings: { ...s.settings, autoScroll: e.target.checked } }))} /> Terminal auto-scroll</label>
         <label>Default DNS resolver<select value={store.settings.resolver} onChange={(e) => update((s) => ({ ...s, settings: { ...s.settings, resolver: e.target.value as ResolverChoice } }))}>
           <option value="google">Google</option><option value="cloudflare">Cloudflare</option><option value="compare">Compare both</option></select></label>
+        <label><input type="checkbox" checked={store.settings.ipConsent} onChange={(e) => update((s) => ({ ...s, settings: { ...s.settings, ipConsent: e.target.checked } }))} /> Allow external IP metadata lookup (ipwho.is)</label>
+        <label>History retention<select value={store.settings.historyRetention} onChange={(e) => update((s) => ({ ...s, settings: { ...s.settings, historyRetention: Number(e.target.value) } }))}><option value={50}>50 reports</option><option value={100}>100 reports</option><option value={250}>250 reports</option></select></label>
       </div>
       <p className="muted">All data is stored in this browser only (LocalStorage, schema v{store.version}).</p>
     </section>

@@ -1,0 +1,12 @@
+{
+  "name": "OBIX NET-LAB X",
+  "short_name": "OBIX NET-LAB",
+  "description": "Mobile network intelligence workstation with real browser diagnostics and offline tools.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#050706",
+  "theme_color": "#050706",
+  "icons": [{ "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}

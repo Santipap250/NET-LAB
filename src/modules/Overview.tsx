@@ -34,7 +34,7 @@ async function probe(url: string): Promise<string | null> {
 type Backend = "checking" | "ok" | "unavailable";
 
 export default function Overview({ ctx }: { ctx: Ctx }) {
-  const { store, log } = ctx;
+  const { store, log, update } = ctx;
   const [info, setInfo] = useState<IpInfo | null>(null);
   const [err, setErr] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -52,13 +52,19 @@ export default function Overview({ ctx }: { ctx: Ctx }) {
     catch { setBackend("unavailable"); }
     setLoading(false);
   }, [log]);
-  useEffect(() => { void refresh(false); }, [refresh]);
+  useEffect(() => { if (store.settings.ipConsent) void refresh(false); }, [refresh, store.settings.ipConsent]);
 
   const recent = store.latency.slice(-30);
   const last = [...store.latency].reverse().find((s) => s.ms !== null);
   const st = computeStats(recent.map((s) => s.ms).filter((x): x is number => x !== null));
   const line = (v: string | null | undefined) => (v === undefined ? "checking…" : v ?? "unavailable");
 
+  if (!store.settings.ipConsent) return <section className="card consent-card">
+    <span className="eyebrow">PRIVACY GATE</span><h2>Public IP intelligence</h2>
+    <p>OBIX จะส่งข้อมูล IP สาธารณะของคุณไปยังผู้ให้บริการ metadata ภายนอกเพื่อแสดง ISP, ASN และตำแหน่งโดยประมาณ ข้อมูลตำแหน่งเป็นเพียงค่าประมาณและอาจไม่แม่นยำ</p>
+    <p className="muted">จะไม่บันทึกประวัติ IP metadata โดยอัตโนมัติ และคุณปิดสิทธิ์นี้ได้จาก Settings ทุกเมื่อ</p>
+    <button className="btn primary" onClick={() => update(s => ({ ...s, settings: { ...s.settings, ipConsent: true } }))}>ยอมรับและโหลดข้อมูล IP</button>
+  </section>;
   return (
     <>
       <section className="card">

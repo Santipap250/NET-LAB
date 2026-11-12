@@ -1,81 +1,79 @@
-# OBIX NET-LAB — Hacker Extreme Edition
-**NETWORK INTELLIGENCE // DIAGNOSTICS // ANALYSIS**
+# OBIX NET-LAB X
 
-Open-source network diagnostics workstation. React + TypeScript + Vite frontend, Vercel serverless functions backend, no database, no paid services.
+**CONTROL YOUR CONNECTION. MASTER YOUR NETWORK.**
 
-> **Status:** v0.1 scaffold. The initial release has been validated with `npm install`, `npm run typecheck`, `npm test` (49 passing), and `npm run build`.
+Mobile-first, open-source network intelligence workstation for Android Chrome, iOS, tablet and desktop. Built with React, TypeScript, Vite and Vercel Functions. Core tools do not require an account, database or paid API.
+
+## What is implemented on this branch
+
+The existing V0.1 diagnostics remain available and are wrapped in a new mobile command-center shell with HOME, DIAGNOSE, DNS, TOOLKIT and HISTORY navigation. The shell supports Thai by default with an English switcher, safe-area-aware bottom navigation, offline application shell, local history, reduced-motion behavior and explicit online/offline status.
+
+HOME keeps real public IP and backend diagnostics, but external IP metadata is gated behind an explicit privacy consent. DIAGNOSE adds a real one-tap workflow for same-origin health, HTTP RTT, trusted DNS, IPv4 and IPv6 availability. It reports Healthy, Degraded, Unstable or Unavailable and never calls HTTP RTT ICMP ping or cellular-radio latency.
+
+TOOLKIT works offline and includes IPv4/CIDR subnet calculations, binary conversion, domain validation, JSON formatting/minifying, URL encoding, Base64, SHA-256 and HTTP status references. CONNECTION DOCTOR is a local rule-based guide for Wi-Fi, 4G, 5G, VPN and common symptoms, including Android/POCO X6 Pro instructions. HISTORY exports JSON/CSV, copies reports, clears local data and respects a configurable retention limit.
+
+DNS still supports A, AAAA, CNAME, MX, NS, TXT and SOA through fixed Google and Cloudflare DoH providers. HTTP Diagnostics retains method/port/DNS/SSRF/IP-pinning/redirect/timeout/body-protection controls. Route parsing remains local and does not simulate OS traceroute.
 
 ## Screenshots
-Production screenshots captured at 1440px and 390px are included here:
 
-![Production desktop overview at 1440px](docs/production-overview-loaded-1440.png)
+Feature-branch runtime screenshots:
 
-![Production mobile overview at 390px](docs/production-overview-loaded-390.png)
+![OBIX NET-LAB X mobile at 390px](docs/feature/mobile-390.png)
 
-## Features
-- **Overview** – public IPv4/IPv6, ISP, ASN, approximate location (5-min cache, source + timestamp shown), diagnostics summary, latency chart, live terminal.
-- **DNS** – A/AAAA/CNAME/MX/NS/TXT/SOA over DNS-over-HTTPS (Google, Cloudflare, or side-by-side compare), TTLs, copy record, export JSON.
-- **Latency Lab** – HTTP time-to-response via `performance.now()`, min/max/avg/median/jitter, success/failure counts, CORS status, stop button. *HTTP latency is not ICMP ping; no packet loss is reported.*
-- **HTTP Diagnostics** – server-side GET/HEAD with redirect chain, headers, status, duration (SSRF-protected).
-- **Route** – paste traceroute/tracert/mtr text, parse hops, table + bars, export JSON/CSV.
-- **System** – backend health check, history, JSON/CSV export, clear history, settings (versioned LocalStorage with recovery).
+![OBIX NET-LAB X desktop at 1440px](docs/feature/desktop-1440.png)
 
-Not included in v0.1: TLS metadata, IP-type classification, Tailwind/Framer Motion/Recharts (plain CSS + SVG used to keep the bundle tiny), ESLint/Prettier, Playwright E2E.
+Previous production baseline screenshots:
 
-## Architecture
-```
-Browser (React) ──► DoH resolvers (dns.google, cloudflare-dns.com)
-        │       ──► ipify / ipwho.is (fallback when no backend)
-        └──► /api/health | /api/ip | /api/inspect-url  (Vercel Functions)
-                                       └──► validated + IP-pinned outbound request
-```
-```
-api/            health.ts ip.ts inspect-url.ts  _lib/ssrf.ts _lib/rate.ts
-src/            App.tsx  modules/  components/  lib/  types.ts  styles.css
-tests/          unit/  integration/
-```
+![Production desktop overview](docs/production-overview-loaded-1440.png)
 
-## Local installation
+![Production mobile overview](docs/production-overview-loaded-390.png)
+
+## PWA and offline behavior
+
+The app includes `public/manifest.webmanifest`, `public/icon.svg` and a versioned `public/sw.js`. The service worker caches only the application shell and same-origin static assets; `/api/*` and external network responses are never cached. Toolkit, Doctor, settings and local history are available offline. Online diagnostics show an offline/unavailable result when the browser cannot reach the network.
+
+## Development and verification
+
 ```bash
-npm install
+npm ci
+npm run lint
 npm run typecheck
 npm test
-npm run dev          # frontend only (backend calls fall back or show "API not available")
-npx vercel dev       # frontend + /api functions (needed for HTTP Diagnostics)
 npm run build
+npm run dev
 ```
 
-## Environment variables
-See `.env.example`. `INSPECT_RATE_LIMIT` (default 10 requests/min/IP). No secrets required.
+The feature branch verification completed with ESLint passing, TypeScript typecheck passing, **54 tests passing**, and Vite production build passing. Production dependencies report no audit vulnerabilities; dev-tool audit status should be reviewed separately when upgrading the toolchain.
 
-## Deploy to Vercel
-```bash
-git init
-git add .
-git commit -m "feat: initial OBIX NET-LAB release"
-git branch -M main
-git remote add origin YOUR_GITHUB_REPOSITORY
-git push -u origin main
+## Architecture
+
+```text
+Browser (React)
+  ├─ local Toolkit / Doctor / LocalStorage history
+  ├─ fixed DoH: dns.google, cloudflare-dns.com
+  ├─ ipify availability checks (only during diagnostics/overview)
+  └─ /api/health | /api/ip | /api/inspect-url (Vercel Functions)
+                                      └─ validated + IP-pinned outbound request
 ```
-Then on vercel.com: **Add New → Project → Import** the repository. Framework preset: *Vite* (build `npm run build`, output `dist`). Deploy. Check current Hobby plan limits (function duration, invocations) at vercel.com/docs/limits.
 
-## API
-| Endpoint | Description |
-|---|---|
-| `GET /api/health` | `{status, application, timestamp}` |
-| `GET /api/ip` | `{ip, ipVersion, provider, country, region, city, asn, source, timestamp}` for the caller (via ipwho.is) |
-| `POST /api/inspect-url` | body `{url, method: "GET"\|"HEAD"}` → `{requestedUrl, finalUrl, statusCode, responseTimeMs, responseHeaders, redirectChain, timestamp}` |
+`src/lib/` contains pure stats, DNS, validation, storage, toolkit, doctor and diagnostic logic. `src/modules/` contains the command center, Diagnose, DNS, Toolkit, History and preserved legacy workbenches. `api/_lib/ssrf.ts` was not weakened or changed on this branch.
 
-Errors: `{ "error": { "code", "message" } }` with 400/403/405/429/502/504. No stack traces are returned.
+## Privacy and security
 
-## Security limitations
-See `SECURITY.md`. Rate limiting is in-memory per function instance (best effort). The IP-metadata provider (ipwho.is) is free but its terms and limits can change.
+IP metadata lookup is opt-in. The app labels location as approximate and does not store IP metadata history. The HTTP inspection endpoint keeps HTTP/HTTPS-only, ports 80/443, credential blocking, private/loopback/link-local/metadata blocking, DNS validation, IP pinning, redirect validation, timeout, response-size and no-body-exposure protections. See [SECURITY.md](SECURITY.md).
 
-## Troubleshooting
-- *HTTP Diagnostics says API not available* → use `npx vercel dev` or deploy.
-- *Latency test fails on http:// URL* → browsers block mixed content from https pages.
-- *CORS blocked* → the server is reachable but does not allow cross-origin reads; timing is still measured.
-- *Import errors in api/ at runtime* → relative imports in `api/` must keep the `.js` extension.
+The current serverless rate limiter is best effort because its in-memory bucket is not shared across Vercel instances. A hard distributed limit requires a shared store or Vercel Firewall; this branch does not silently add a paid integration or fake a guarantee.
 
-## Contributing / License
-See `CONTRIBUTING.md`. MIT License.
+## CI and delivery
+
+GitHub Actions is defined in `.github/workflows/ci.yml` and runs `npm ci`, lint, typecheck, tests and build on `main` and `manus/mobile-premium-upgrade` and on pull requests to `main`.
+
+Repository: <https://github.com/Santipap250/NET-LAB>
+
+Feature branch: `manus/mobile-premium-upgrade`
+
+Vercel project/deployment permissions must be verified in the target team before claiming a preview URL. No credentials are stored in this repository.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
