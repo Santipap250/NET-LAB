@@ -48,3 +48,13 @@ Signature brand color: #39FF88 neon signal green.
 ## Known platform limits
 
 Browser code cannot run ICMP, cellular-radio measurements, OS traceroute, or Android settings changes. Production Vercel in-memory rate limiting remains best effort without a shared store. Vercel preview/deploy permissions must be verified separately.
+
+## OBIX SIGNAL RADAR — Android extension
+
+Extend the existing React + TypeScript + Vite + Vercel application without removing tested workbenches. Add an Android Capacitor shell with a Kotlin native bridge named `SignalRadar` for real Wi-Fi scan results, BLE advertisements and cellular signal callbacks. The web layer calls the bridge only when available; browsers render an explicit unsupported/permission state and never fabricate measurements.
+
+The bridge uses platform APIs only: `WifiManager`, `BluetoothLeScanner`, and `TelephonyManager`/`TelephonyCallback` where the device/API exposes them. IDs are masked by default, raw identifiers are never uploaded, and local history remains local. Radar positions are visual grouping coordinates only, never direction, distance or coordinates.
+
+Structure: `src/modules/SignalRadar.tsx` owns the dashboard and fallback; `src/lib/signalRadar.ts` owns the typed bridge adapter, quality thresholds, masking and local-only history; `android/app/src/main/java/.../SignalRadarPlugin.kt` owns native callbacks; `AndroidManifest.xml` declares only required permissions; `docs/signal-radar-android.md` documents installation and limitations; `.github/workflows/android.yml` runs available static/native checks without signing secrets.
+
+Use the existing Hacker Extreme OLED language: green means measured/available, cyan means metadata/capability, amber means stale/restricted, red means error. Keep readable values, restrained radar sweep, and reduced-motion support. Claim an APK only if the Android SDK/Gradle build actually completes. Never add keystores, paid APIs, or fabricated signal values.

@@ -1,27 +1,12 @@
-# OBIX NET-LAB X delivery status
 
-## Completed on `manus/mobile-premium-upgrade`
 
-- [x] Mobile-first shell with HOME / DIAGNOSE / DNS / TOOLKIT / HISTORY, safe-area bottom navigation and responsive 360–430px/desktop layout.
-- [x] Home command center with real public-IP/backend information behind explicit privacy consent and preserved event/latency chart.
-- [x] Quick diagnosis using real health, HTTP RTT, trusted DNS and IPv4/IPv6 availability checks, honest status classification, progress and Stop.
-- [x] DNS A/AAAA/CNAME/MX/NS/TXT/SOA, fixed Google/Cloudflare DoH, comparison, TTL, response time, copy/export and existing history behavior.
-- [x] Privacy opt-in, approximate-location labeling, refresh/loading/error path and no IP metadata history.
-- [x] Offline Toolkit: IPv4/CIDR, binary conversion, domain validation, JSON format/minify, URL/Base64, SHA-256 and HTTP status reference.
-- [x] Local Connection Doctor rules for Wi-Fi/4G/5G/VPN/Other symptoms with Android and POCO X6 Pro guidance.
-- [x] Existing HTTP/Route security and diagnostics preserved; SSRF implementation was not weakened or modified.
-- [x] PWA manifest, custom icon, service worker, versioned shell cache, update notice and `/manus-routes.json`.
-- [x] Thai default / English switcher persisted in versioned LocalStorage.
-- [x] Local history/reporting with JSON/CSV/copy/clear and configurable report retention.
-- [x] ESLint, GitHub Actions CI, new toolkit/doctor tests and mobile/desktop screenshots.
+## OBIX SIGNAL RADAR outcomes — open until evidenced
 
-## Tested
-
-`npm ci`, `npm run lint`, `npm run typecheck`, `npm test` (54/54), `npm run build`, production-dependency audit, Vite preview, manifest/service-worker/route HTTP endpoints, and screenshots at 360, 375, 390, 412, 430 and desktop 1440px were executed on this branch.
-
-## Open limitations
-
-- Browser APIs cannot perform ICMP, cellular-radio measurements, OS traceroute or automatic Android network-setting changes.
-- Vercel in-memory rate limiting remains best effort across serverless instances; hard distributed enforcement needs a shared store or Firewall.
-- Copy/download end-to-end behavior depends on browser permissions and was not claimed beyond the available sandbox verification.
-- Vercel preview and pull-request creation require repository/team permissions and must be reported only after verified responses.
+- [ ] **Android native shell and bridge.** Preserve React + TypeScript + Vite + Vercel; add Android Native with Kotlin and Jetpack Compose or Capacitor; connect native data to React UI through a bridge; keep the PWA usable without the Android app.
+- [ ] **Browser honesty.** Browser mode must state its hardware/API limitations and must not display simulated values as real measurements. No random, placeholder or fabricated signal data may be added.
+- [ ] **Wi-Fi Radar.** Use Android `WifiManager`; show SSID, partially masked BSSID, RSSI dBm, frequency, channel, band, system-reported security, quality, last-seen and scan time; provide Scan Now/Stop, strongest-first sorting, congestion overview, signal comparison/chart, stale indication, Android scan throttling, retry and error handling.
+- [ ] **Bluetooth LE Radar.** Use `BluetoothLeScanner`; show name when available, masked device ID, RSSI, manufacturer data when advertised, classification only when actually inferable, first/last seen and present/missing state; deduplicate, show RSSI history, Start/Stop, explicit user enablement, unnamed devices, and no forced connections.
+- [ ] **Cellular Radar.** Use `TelephonyManager` and `TelephonyCallback` where supported; show only exposed carrier/SIM/network/signal/RSSI/RSRP/RSRQ/SINR/SNR/cell fields, dual-SIM state where available, registered/serving state where supported, and never invent missing values.
+- [ ] **Radar visualization and intelligence.** Use OLED black/neon green/cyan, restrained sweep and low-battery animation; label point placement as list/signal visualization only, never direction/distance/coordinates; add approximate quality thresholds, history, strongest/weak warnings, channel congestion and rule-based guidance.
+- [ ] **Permissions and privacy.** Request only Android 12+ Bluetooth permissions, Android 13+ nearby Wi-Fi permission, required location/phone state permissions; explain before runtime request; show Permission Status and denial recovery; never request SMS, contacts, call log, microphone, camera or accessibility; do not send BSSID/Bluetooth IDs/cell information to server; provide local deletion.
+- [ ] **Build and evidence.** Add free-only Gradle build/test and GitHub Actions where possible; keep signing keys out of Git; document APK installation and permissions; separately report web checks, native build checks and real-device checks; do not claim APK or hardware support without a successful command/device result.
